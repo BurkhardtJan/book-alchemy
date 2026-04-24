@@ -1,10 +1,11 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from data_models import db, Author, Book
 import os
 from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = '12345SecretKey67890'
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
 db.init_app(app)
@@ -109,6 +110,33 @@ def add_book():
     success_message = "Book successfully added!"
     authors = Author.query.all()
     return render_template("add_book.html", success_message=success_message, authors=authors), 201
+
+
+@app.route('/book/<int:book_id>/delete', methods=['POST'])
+def delete_book(book_id):
+    """Delete a Book by ID"""
+    book = Book.query.get_or_404(book_id)
+    author = book.author
+    db.session.delete(book)
+    title = book.title
+    flash(f"Removed Book '{title}'")
+    if not author.books:
+        name = author.name
+        db.session.delete(author)
+        flash(f"Removed Author '{name}'")
+    db.session.commit()
+    return redirect(url_for('home'))
+
+
+@app.route('/author/<int:book_id>/delete', methods=['POST'])
+def delete_author(author_id):
+    """Delete a Book by ID"""
+    author = Author.query.get_or_404(author_id)
+    db.session.delete(author)
+    name = author.name
+    db.session.commit()
+    flash(f"Removed Author '{name}'")
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
