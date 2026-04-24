@@ -21,21 +21,27 @@
     </select>
 
     <button type="submit">Get Books</button>
+    <hr>
+    <input type="text" name="search_book_title" placeholder="Search by title">
+    <input type="text" name="search_book_author" placeholder="Search by author">
+    <input type="text" name="search_book_year" placeholder="Search by year">
+    <button type="submit">Find Books</button>
+
 </form>
 
 <hr>
 {% if not books %}
-<p>No Books in database!</p>
+<p>No Books found in database!</p>
 {% else %}
 {% for book in books %}
 <div class="book-card">
-    <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" alt="Cover von {{ book.title }}">
+    <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" alt="Cover of {{ book.title }}">
 
     <h3>{{ book.title }}</h3>
 
-    <p><strong>Autor:</strong> {{ book.author.name }}</p>
+    <p><strong>Author:</strong> {{ book.author.name }}</p>
 
-    <p><small>Erschienen: {{ book.publication_year }}</small></p>
+    <p><small>Publication Year: {{ book.publication_year }}</small></p>
 </div>
 {% endfor %}
 {% endif %}

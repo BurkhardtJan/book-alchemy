@@ -19,10 +19,20 @@ def setup_create():
 @app.route('/', methods=['GET'])
 def home():
     """Shows home page"""
+    search_book_title = request.args.get('search_book_title')
+    search_book_author = request.args.get('search_book_author')
+    search_book_year = request.args.get('search_book_year')
     sort_by = request.args.get('sort', 'title')
     direction = request.args.get('direction', 'asc')
 
     query = Book.query
+    if search_book_author:
+        query = query.join(Author).filter(Author.name.like(f"%{search_book_author}%"))
+    if search_book_title:
+        query = query.filter(Book.title.like(f"%{search_book_title}%"))
+    if search_book_year:
+        query = query.filter(Book.publication_year.like(f"%{search_book_year}%"))
+
     if sort_by == 'author':
         sort_column = Author.name
         query = query.join(Author)
