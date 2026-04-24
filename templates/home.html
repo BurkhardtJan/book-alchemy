@@ -48,6 +48,9 @@
     <h3>{{ book.title }}</h3>
 
     <p><strong>Author:</strong> {{ book.author.name }}</p>
+    <form action="{{ url_for('delete_author', author_id=book.author.id) }}" method="POST">
+        <button type="submit">Delete Author</button>
+    </form>
 
     <p><small>Publication Year: {{ book.publication_year }}</small></p>
     <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
