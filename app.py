@@ -1,17 +1,106 @@
-from flask import Flask
+from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from data_models import db, Author, Book
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
 db.init_app(app)
 
+
 def setup_create():
     """Create the table. Only used to initialize the database."""
     with app.app_context():
         db.create_all()
 
+
+@app.route('/', methods=['GET'])
+def home():
+    """Shows home page"""
+    sort_by = request.args.get('sort', 'title')
+    direction = request.args.get('direction', 'asc')
+
+    query = Book.query
+    if sort_by == 'author':
+        sort_column = Author.name
+        query = query.join(Author)
+    elif sort_by == 'year':
+        sort_column = Book.publication_year
+    else:
+        sort_column = Book.title
+
+    if direction == 'desc':
+        query = query.order_by(sort_column.desc())
+    else:
+        query = query.order_by(sort_column.asc())
+
+    books = query.all()
+    authors = Author.query.all()
+    return render_template("home.html", books=books, authors=authors), 200
+
+
+@app.route('/add_author', methods=['GET'])
+def add_author_webpage():
+    """Shows page to add author"""
+    return render_template("add_author.html"), 200
+
+
+@app.route('/add_author', methods=['POST'])
+def add_author():
+    """Adds author to database"""
+    name = request.form.get("name")
+    birthdate = request.form.get("birthdate")
+    date_of_death = request.form.get("date_of_death")
+
+    birth_date = None
+    if birthdate:
+        birth_date = datetime.strptime(birthdate, '%Y-%m-%d').date()
+
+    death_date = None
+    if date_of_death:
+        death_date = datetime.strptime(date_of_death, '%Y-%m-%d').date()
+
+    new_author = Author(
+        name=name,
+        birth_date=birth_date,
+        death_date=death_date
+    )
+    db.session.add(new_author)
+    db.session.commit()
+    success_message = "Author successfully added!"
+    return render_template("add_author.html", success_message=success_message), 201
+
+
+@app.route('/add_book', methods=['GET'])
+def add_book_webpage():
+    """Shows page to add book"""
+    authors = Author.query.all()
+    return render_template("add_book.html", authors=authors), 200
+
+
+@app.route('/add_book', methods=['POST'])
+def add_book():
+    """Adds book to database"""
+    title = request.form.get("title")
+    isbn = request.form.get("isbn")
+    author_id = request.form.get("author_id")
+    publication_year = request.form.get("publication_year")
+
+    new_book = Book(
+        isbn=isbn,
+        title=title,
+        publication_year=publication_year,
+        author_id=author_id
+    )
+    db.session.add(new_book)
+    db.session.commit()
+    success_message = "Book successfully added!"
+    authors = Author.query.all()
+    return render_template("add_book.html", success_message=success_message, authors=authors), 201
+
+
 if __name__ == '__main__':
     setup_create()
+    app.run(host="0.0.0.0", port=5002, debug=True)
