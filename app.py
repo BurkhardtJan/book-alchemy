@@ -143,6 +143,20 @@ def delete_author(author_id):
     return redirect(url_for('home'))
 
 
+@app.route('/book/<int:book_id>', methods=['GET'])
+def show_book(book_id):
+    """Shows detail page of book by ID"""
+    book = Book.query.get_or_404(book_id)
+    return render_template("book_detail.html", book=book), 200
+
+
+@app.route('/author/<int:author_id>', methods=['GET'])
+def show_author(author_id):
+    """Shows detail page of author by ID"""
+    author = Author.query.get_or_404(author_id)
+    return render_template("author_detail.html", author=author), 200
+
+
 if __name__ == '__main__':
     setup_create()
     app.run(host="0.0.0.0", port=5002, debug=True)

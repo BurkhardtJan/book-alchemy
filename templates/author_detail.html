@@ -2,18 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Author</title>
 </head>
 <body>
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-{% for message in messages %}
-<div class="alert">{{ message }}</div>
-<hr>
-{% endfor %}
-{% endif %}
-{% endwith %}
 <form action="{{ url_for('home') }}" method="GET">
     <select name="sort" id="sort">
         <option value="" disabled selected>-- Sort by --</option>
@@ -36,24 +27,23 @@
     <button type="submit">Find Books</button>
 
 </form>
-
 <hr>
-{% if not books %}
-<p>No Books found in database!</p>
-{% else %}
-{% for book in books %}
+<div class="author-card">
+    <h1>{{ author.name }}</h1>
+    <p>Birth Date: {{ author.birth_date }}</p>
+    {% if author.death_date %}
+    <p>Death Date: {{ author.death_date }}</p>
+    {% endif %}
+    <form action="{{ url_for('delete_author', author_id=author.id) }}" method="POST">
+        <button type="submit">Delete Author</button>
+    </form>
+</div>
+
+{% for book in author.books %}
 <div class="book-card">
     <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" alt="Cover of {{ book.title }}">
 
     <h3>{{ book.title }}</h3>
-
-    <p><strong>Author:</strong> {{ book.author.name }}</p>
-    <form action="{{ url_for('show_author', author_id=book.author.id) }}" method="GET">
-        <button type="submit">Show Author</button>
-    </form>
-    <form action="{{ url_for('delete_author', author_id=book.author.id) }}" method="POST">
-        <button type="submit">Delete Author</button>
-    </form>
 
     <p><small>Publication Year: {{ book.publication_year }}</small></p>
     <form action="{{ url_for('show_book', book_id=book.id) }}" method="GET">
@@ -64,6 +54,5 @@
     </form>
 </div>
 {% endfor %}
-{% endif %}
 </body>
 </html>
