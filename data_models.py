@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class Author(db.Model):
+    """Author model"""
     __tablename__ = "authors"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -15,6 +16,7 @@ class Author(db.Model):
 
 
 class Book(db.Model):
+    """Book model"""
     __tablename__ = "books"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
