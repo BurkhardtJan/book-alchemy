@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Book</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 <form action="{{ url_for('home') }}" method="GET">
@@ -25,24 +26,34 @@
     <input type="text" name="search_book_author" placeholder="Search by author">
     <input type="text" name="search_book_year" placeholder="Search by year">
     <button type="submit">Find Books</button>
+    <hr>
 
 </form>
+<div class="book-card">
+    <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" alt="Cover of {{ book.title }}">
+
+    <h3>{{ book.title }}</h3>
+
+
+    <p>Publication Year: {{ book.publication_year }}</p>
+    <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
+        <button type="submit">Delete Book</button>
+    </form>
+</div>
 <hr>
-<img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" alt="Cover of {{ book.title }}">
+<div class="author-card">
+    <h3><strong>Author: </strong>{{ book.author.name }}</h3>
+    <p>Birth Date: {{ book.author.birth_date }}</p>
+    {% if book.author.death_date %}
+    <p>Death Date: {{ book.author.death_date }}</p>
+    {% endif %}
+    <form action="{{ url_for('show_author', author_id=book.author.id) }}" method="GET">
+        <button type="submit">Show Author</button>
+    </form>
+    <form action="{{ url_for('delete_author', author_id=book.author.id) }}" method="POST">
+        <button type="submit">Delete Author</button>
+    </form>
+</div>
 
-<h3>{{ book.title }}</h3>
-
-<p><strong>Author:</strong> {{ book.author.name }}</p>
-<form action="{{ url_for('show_author', author_id=book.author.id) }}" method="GET">
-    <button type="submit">Show Author</button>
-</form>
-<form action="{{ url_for('delete_author', author_id=book.author.id) }}" method="POST">
-    <button type="submit">Delete Author</button>
-</form>
-
-<p><small>Publication Year: {{ book.publication_year }}</small></p>
-<form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
-    <button type="submit">Delete Book</button>
-</form>
 </body>
 </html>

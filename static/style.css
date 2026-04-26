@@ -1,0 +1,140 @@
+/* Grundlegendes Design */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+/* Such- und Sortierbereich */
+/* Container für die gesamte obere Leiste */
+form[action*="home"] {
+    display: flex;
+    justify-content: space-between; /* Trennt Sortieren (links) und Suchen (rechts) */
+    align-items: center;
+    background: #fff;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+    flex-wrap: wrap; /* Falls der Platz auf dem Handy nicht reicht */
+}
+
+/* Gruppierung der Elemente innerhalb der Form */
+.form-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Rote Delete-Buttons */
+button[action*="delete"],
+form[action*="delete"] button,
+.delete-btn {
+    background-color: #e74c3c;
+}
+
+button[action*="delete"]:hover,
+form[action*="delete"] button:hover {
+    background-color: #c0392b;
+}
+
+
+.book-card h3 {
+    min-height: 3em; /* Reserviert Platz für 2-zeilige Titel */
+}
+
+/* Dieser Trick schiebt die Buttons nach ganz unten, egal wie lang der Text darüber ist */
+.button-container {
+    margin-top: auto;
+    width: 100%;
+}
+
+.book-card form {
+    margin: 4px 0;
+    width: 100%;
+}
+
+input, select, button {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+/* Grid für die Buch-Karten */
+#post-container, .book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* Die Karten (Book Cards) */
+.book-card, .author-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+/* Buttons auf die gleiche Höhe bringen */
+.book-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Sorgt für gleich hohe Karten im Grid */
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+}
+
+.book-card img {
+    max-width: 150px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* Button-Gruppen in der Karte */
+.book-card form {
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+    margin: 5px 0;
+    width: 100%;
+}
+
+.book-card button {
+    width: 100%;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
