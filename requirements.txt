@@ -1,0 +1,5 @@
+flask
+flask_sqlalchemy
+sqlalchemy
+flask_sqlalchemy
+jinja2

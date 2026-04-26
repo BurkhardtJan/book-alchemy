@@ -39,6 +39,15 @@
 </form>
 
 <hr>
+<div class="action-bar">
+    <form action="{{ url_for('add_author') }}" method="GET">
+        <button type="submit" class="success-btn">+ Add Author</button>
+    </form>
+    <form action="{{ url_for('add_book') }}" method="GET">
+        <button type="submit" class="success-btn">+ Add Book</button>
+    </form>
+</div>
+<hr>
 {% if not books %}
 <p>No Books found in database!</p>
 {% else %}
