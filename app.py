@@ -19,7 +19,7 @@ def setup_create():
 
 @app.route('/', methods=['GET'])
 def home():
-    """Shows home page"""
+    """Shows home page. Manages sort und different filters with AND logic."""
     search_book_title = request.args.get('search_book_title')
     search_book_author = request.args.get('search_book_author')
     search_book_year = request.args.get('search_book_year')

@@ -7,7 +7,29 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+<form action="{{ url_for('home') }}" method="GET">
+    <select name="sort" id="sort">
+        <option value="" disabled selected>-- Sort by --</option>
+        <option value="title">Title</option>
+        <option value="author">Author</option>
+        <option value="year">Publication Year</option>
+    </select>
 
+    <select name="direction" id="direction">
+        <option value="" disabled selected>-- Direction --</option>
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+    </select>
+
+    <button type="submit">Get Books</button>
+    <hr>
+    <input type="text" name="search_book_title" placeholder="Search by title">
+    <input type="text" name="search_book_author" placeholder="Search by author">
+    <input type="text" name="search_book_year" placeholder="Search by year">
+    <button type="submit">Find Books</button>
+
+</form>
+<hr>
 <form action="/add_book" method="POST">
     <label for="title">Book Title:</label>
     <input type="text" id="title" name="title" required><br><br>
